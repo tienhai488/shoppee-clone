@@ -1,6 +1,6 @@
 import type { UseFormGetValues, FieldValues } from "react-hook-form"
 
-export const getRules = <TFieldValues extends FieldValues>(getValues?: UseFormGetValues<TFieldValues>) => ({
+export const getRules = <TFieldValues extends FieldValues>(getValues?: UseFormGetValues<TFieldValues>): Record<string, any> => ({
   email: {
     required: {
       value: true,

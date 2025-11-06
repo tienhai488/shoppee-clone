@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
+import FormInput from 'src/components/Form/FormInput'
 import { getRules } from 'src/utils/rules'
 
 interface FormData {
@@ -41,36 +42,36 @@ export default function Register() {
           <div className='lg:col-span-2 lg:col-start-4'>
             <form className='p-10 rounded bg-white shadow-sm' onSubmit={onSubmit} noValidate>
               <div className='text-2xl'>Đăng Ký</div>
-              <div className='mt-8'>
-                <input
-                  type='email'
-                  id='email'
-                  className='p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
-                  placeholder='Email'
-                  {...register('email', rules.email)}
-                />
-                <div className='mt-1 text-red-600 min-h-[1.25rem] text-sm'>{errors.email?.message}</div>
-              </div>
-              <div className='mt-3'>
-                <input
-                  type='password'
-                  id='password'
-                  className='p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
-                  placeholder='Mật khẩu'
-                  {...register('password', rules.password)}
-                />
-                <div className='mt-1 text-red-600 min-h-[1.25rem] text-sm'>{errors.password?.message}</div>
-              </div>
-              <div className='mt-3'>
-                <input
-                  type='password'
-                  id='password_confirmation'
-                  className='p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
-                  placeholder='Xác nhận mật khẩu'
-                  {...register('password_confirmation', rules.password_confirmation)}
-                />
-                <div className='mt-1 text-red-600 min-h-[1.25rem] text-sm'>{errors.password_confirmation?.message}</div>
-              </div>
+              <FormInput
+                id='email'
+                type='email'
+                className='mt-8'
+                name='email'
+                placeholder='Email'
+                register={register}
+                rules={rules.email}
+                errorMessage={errors.email?.message}
+              />
+              <FormInput
+                id='password'
+                type='password'
+                className='mt-3'
+                name='password'
+                placeholder='Mật khẩu'
+                register={register}
+                rules={rules.password}
+                errorMessage={errors.password?.message}
+              />
+              <FormInput
+                id='password_confirmation'
+                type='password'
+                className='mt-3'
+                name='password_confirmation'
+                placeholder='Xác nhận mật khẩu'
+                register={register}
+                rules={rules.password_confirmation}
+                errorMessage={errors.password_confirmation?.message}
+              />
               <div className='mt-3'>
                 <button
                   type='submit'
