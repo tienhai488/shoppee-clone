@@ -1,7 +1,8 @@
+import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import FormInput from 'src/components/Form/FormInput'
-import { getRules } from 'src/utils/rules'
+import schema from 'src/utils/rules'
 
 interface FormData {
   email: string
@@ -13,27 +14,19 @@ export default function Register() {
   const {
     register,
     handleSubmit,
-    watch,
-    getValues,
     formState: { errors }
-  } = useForm<FormData>()
+  } = useForm<FormData>({
+    resolver: yupResolver(schema)
+  })
 
   const onSubmit = handleSubmit(
     (data) => {
       console.log(data)
     },
     (data) => {
-      const password = getValues('password')
-      console.log('password', password)
-
       console.log('errors', data)
     }
   )
-
-  const rules = getRules<FormData>(getValues)
-
-  const formValues = watch()
-  console.log('form values', formValues)
 
   return (
     <div className='bg-orange-600'>
@@ -49,7 +42,6 @@ export default function Register() {
                 name='email'
                 placeholder='Email'
                 register={register}
-                rules={rules.email}
                 errorMessage={errors.email?.message}
               />
               <FormInput
@@ -59,7 +51,6 @@ export default function Register() {
                 name='password'
                 placeholder='Mật khẩu'
                 register={register}
-                rules={rules.password}
                 errorMessage={errors.password?.message}
               />
               <FormInput
@@ -69,7 +60,6 @@ export default function Register() {
                 name='password_confirmation'
                 placeholder='Xác nhận mật khẩu'
                 register={register}
-                rules={rules.password_confirmation}
                 errorMessage={errors.password_confirmation?.message}
               />
               <div className='mt-3'>
