@@ -21,17 +21,13 @@ export default function FormInput({
   classNameInput,
   name,
   register,
-  rules
+  rules,
+  ...rest
 }: FormInputProps) {
+  const registerResult = register && name ? register(name, rules) : null
   return (
     <div className={className}>
-      <input
-        id={id}
-        type={type}
-        className={classNameInput}
-        placeholder={placeholder}
-        {...(register ? register(name, rules) : {})}
-      />
+      <input id={id} type={type} className={classNameInput} placeholder={placeholder} {...registerResult} {...rest} />
       <div className='mt-1 text-red-600 min-h-[1.25rem] text-sm'>{errorMessage}</div>
     </div>
   )

@@ -3,20 +3,18 @@ import { useMutation } from '@tanstack/react-query'
 import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-import { loginAccount } from 'src/apis/auth.api'
+import authApi from 'src/apis/auth.api'
 import Button from 'src/components/Button'
 import FormInput from 'src/components/Form/FormInput'
 import path from 'src/constants/path'
 import { AppContext } from 'src/contexts/app.context.tsx'
 import type { ErrorResponse } from 'src/types/utils.type'
 import { getProfile } from 'src/utils/profile'
-import { loginSchema } from 'src/utils/rules'
+import { schema, type Schema } from 'src/utils/rules'
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 
-interface FormData {
-  email: string
-  password: string
-}
+type FormData = Pick<Schema, 'email' | 'password'>
+const loginSchema = schema.pick(['email', 'password'])
 
 export default function Login() {
   const { setIsAuthenticated, setProfile } = useContext(AppContext)
@@ -31,7 +29,7 @@ export default function Login() {
   })
 
   const loginAccountMutation = useMutation({
-    mutationFn: (body: FormData) => loginAccount(body)
+    mutationFn: (body: FormData) => authApi.loginAccount(body)
   })
 
   const onSubmit = handleSubmit(

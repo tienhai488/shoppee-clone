@@ -8,3 +8,18 @@ export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
 export function isAxiosUnprocessableEntityError<T>(error: unknown): error is AxiosError<T> {
   return isAxiosError<T>(error) && error.response?.status === HttpStatusCode.UnprocessableEntity
 }
+
+export function formatCurrency(currency: number) {
+  return Intl.NumberFormat('de-DE').format(currency);
+}
+
+export function formatNumberToSocialStyle(value: number) {
+  return new Intl.NumberFormat('en', {
+    notation: 'compact',
+    maximumFractionDigits: 1
+  }).format(value).replace('.', ',').toLocaleLowerCase();
+}
+
+export type NoUndefinedField<T> = {
+  [P in keyof T]-?: NoUndefinedField<T[P]>;
+}
