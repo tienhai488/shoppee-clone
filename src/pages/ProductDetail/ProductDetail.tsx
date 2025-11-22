@@ -6,6 +6,8 @@ import { formatCurrency, formatNumberToSocialStyle, getIdFromNameId, rateSale } 
 import DOMPurify from 'dompurify'
 import ProductRating from 'src/components/ProductRating'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import type { ProductListConfig } from 'src/types/product.type'
+import Product from 'src/components/Product'
 
 export default function ProductDetail() {
   const { nameId } = useParams<{ nameId: string }>()
@@ -28,6 +30,23 @@ export default function ProductDetail() {
   const currentImages = useMemo(() => {
     return product ? product.images.slice(...currentIndexImages) : []
   }, [product, currentIndexImages])
+
+  const queryConfig: ProductListConfig = {
+    page: '1',
+    limit: '20',
+    category: product?.category._id || ''
+  }
+
+  const productsQuery = useQuery({
+    queryKey: ['products', queryConfig],
+    queryFn: () => {
+      return productApi.getProducts(queryConfig)
+    },
+    placeholderData: (previousData) => previousData,
+    staleTime: 3 * 60 * 1000
+  })
+
+  console.log('products query', productsQuery.data?.data.data)
 
   useEffect(() => {
     if (product) {
@@ -76,7 +95,7 @@ export default function ProductDetail() {
   if (!product) return null
 
   return (
-    <div className='bg-gray-200 py-6'>
+    <div className='bg-gray-100 py-6 container mx-auto'>
       <div className='mx-auto'>
         <div className='bg-white p-4 shadow'>
           <div className='grid grid-cols-12 gap-9'>
@@ -243,6 +262,20 @@ export default function ProductDetail() {
                 __html: DOMPurify.sanitize(product.description)
               }}
             />
+          </div>
+        </div>
+        <div className='mt-8 '>
+          <div className='container'>
+            <div className='uppercase text-gray-600 font-bold'>CÓ THỂ BẠN CŨNG THÍCH</div>
+            {productsQuery.data && (
+              <div className='mt-6 grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6'>
+                {productsQuery.data.data.data.products.map((product) => (
+                  <div className='col-span-1' key={product._id}>
+                    <Product product={product} />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
