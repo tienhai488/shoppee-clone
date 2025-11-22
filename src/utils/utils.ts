@@ -23,3 +23,7 @@ export function formatNumberToSocialStyle(value: number) {
 export type NoUndefinedField<T> = {
   [P in keyof T]-?: NoUndefinedField<T[P]>;
 }
+
+export const rateSale = (originalPrice: number, salePrice: number): string => {
+  return Math.round((1 - salePrice / originalPrice) * 100) + '%';
+}

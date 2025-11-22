@@ -10,7 +10,7 @@ interface Props {
 
 export default function Product({ product }: Props) {
   return (
-    <Link to={path.home}>
+    <Link to={path.productDetail.replace(':id', product._id)}>
       <div className='bg-white shadow rounded-sm hover:translate-y-[-0.04rem] hover:shadow-md duration-100 transition-transform overflow-hidden'>
         <div className='w-full pt-[100%] relative'>
           <img
