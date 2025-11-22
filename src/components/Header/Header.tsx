@@ -1,13 +1,29 @@
-import { Link } from 'react-router-dom'
+import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import Popover from '../Popover'
 import { useMutation } from '@tanstack/react-query'
 import { AppContext } from 'src/contexts/app.context.tsx'
 import { useContext } from 'react'
 import path from 'src/constants/path'
 import authApi from 'src/apis/auth.api'
+import { schema, type Schema } from 'src/utils/rules'
+import useQueryConfig from 'src/hooks/useQueryConfig'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+
+type FormData = Pick<Schema, 'name'>
+
+const nameSchema = schema.pick(['name'])
 
 export default function Header() {
+  const queryConfig = useQueryConfig()
+  const { register, handleSubmit } = useForm<FormData>({
+    defaultValues: {
+      name: ''
+    },
+    resolver: yupResolver(nameSchema)
+  })
   const { isAuthenticated, setIsAuthenticated, profile, setProfile } = useContext(AppContext)
+  const navigate = useNavigate()
 
   const logoutMutation = useMutation({
     mutationFn: () => authApi.logout(),
@@ -20,6 +36,16 @@ export default function Header() {
   const handleLogout = () => {
     logoutMutation.mutate()
   }
+
+  const onSubmit = handleSubmit((data) => {
+    navigate({
+      pathname: path.home,
+      search: createSearchParams({
+        ...queryConfig,
+        name: data.name.trim()
+      }).toString()
+    })
+  })
 
   return (
     <div className='pb-5 pt-2 bg-[linear-gradient(-180deg,#f53d2d,#f63)] text-white'>
@@ -119,13 +145,13 @@ export default function Header() {
               </g>
             </svg>
           </Link>
-          <form className='col-span-9'>
+          <form className='col-span-9' onSubmit={onSubmit}>
             <div className='bg-white rounded-sm p-1 flex'>
               <input
                 type='text'
-                name='search'
                 className='text-black px-3 py-2 grow border-none outline-none bg-transparent'
                 placeholder='Free Ship Đơn Từ 0Đ'
+                {...register('name')}
               />
               <button className='rounded-sm py-2 px-6 shrink-0 bg-orange hover:opacity-90'>
                 <svg
