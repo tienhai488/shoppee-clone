@@ -31,12 +31,6 @@ export default function ProductList() {
     }
   })
 
-  console.log('categories', categoryListQuery.data?.data.data)
-
-  console.log('queryConfig', queryConfig)
-  console.log(productListQuery.data?.data)
-  console.log('page size', productListQuery.data?.data.data.pagination.page_size)
-
   return (
     <div className='bg-gray-200 py-6'>
       <div className='container mx-auto'>

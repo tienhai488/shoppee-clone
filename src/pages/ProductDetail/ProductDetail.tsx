@@ -1,7 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 import productApi from 'src/apis/product.api'
-import InputNumber from 'src/components/InputNumber'
 import { formatCurrency, formatNumberToSocialStyle, getIdFromNameId, rateSale } from 'src/utils/utils'
 import DOMPurify from 'dompurify'
 import ProductRating from 'src/components/ProductRating'
@@ -9,6 +8,10 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ProductListConfig } from 'src/types/product.type'
 import Product from 'src/components/Product'
 import QuantityControl from 'src/components/QuantityControl'
+import purchaseApi from 'src/apis/purchase.api'
+import { toast } from 'react-toastify'
+import { queryClient } from 'src/main'
+import { PURCHASE_STATUS } from 'src/constants/purchase'
 
 export default function ProductDetail() {
   const { nameId } = useParams<{ nameId: string }>()
@@ -22,6 +25,22 @@ export default function ProductDetail() {
     queryKey: ['product', id],
     queryFn: () => productApi.getProduct(id as string)
   })
+
+  const addToCartMutation = useMutation({
+    mutationFn: (data: { productId: string; buyCount: number }) => purchaseApi.addToCart(data.productId, data.buyCount)
+  })
+
+  const handleAddToCart = () => {
+    addToCartMutation.mutate(
+      { productId: id as string, buyCount },
+      {
+        onSuccess: (data) => {
+          toast.success(data.data.message, { autoClose: 1000 })
+          queryClient.invalidateQueries({ queryKey: ['purchases', { status: PURCHASE_STATUS.IN_CART }] })
+        }
+      }
+    )
+  }
 
   const [currentIndexImages, setCurrentIndexImages] = useState([0, 5])
   const [activeImage, setActiveImage] = useState('')
@@ -45,10 +64,9 @@ export default function ProductDetail() {
       return productApi.getProducts(queryConfig)
     },
     placeholderData: (previousData) => previousData,
-    staleTime: 3 * 60 * 1000
+    staleTime: 3 * 60 * 1000,
+    enabled: Boolean(queryConfig.category)
   })
-
-  console.log('products query', productsQuery.data?.data.data)
 
   useEffect(() => {
     if (product) {
@@ -200,7 +218,10 @@ export default function ProductDetail() {
                 <div className='ml-6 text-sm text-gray-500'>{product.quantity} sản phẩm có sẵn</div>
               </div>
               <div className='mt-8 flex items-center'>
-                <button className='flex h-12 items-center justify-center rounded-sm border border-orange bg-orange-600/10 px-5 capitalize text-orange-600 shadow-sm hover:bg-orange-600/5 cursor-pointer'>
+                <button
+                  className='flex h-12 items-center justify-center rounded-sm border border-orange bg-orange-600/10 px-5 capitalize text-orange-600 shadow-sm hover:bg-orange-600/5 cursor-pointer'
+                  onClick={handleAddToCart}
+                >
                   <svg
                     enableBackground='new 0 0 15 15'
                     viewBox='0 0 15 15'
