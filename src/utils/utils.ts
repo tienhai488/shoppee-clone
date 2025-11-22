@@ -27,3 +27,17 @@ export type NoUndefinedField<T> = {
 export const rateSale = (originalPrice: number, salePrice: number): string => {
   return Math.round((1 - salePrice / originalPrice) * 100) + '%';
 }
+
+const removeSpecialCharacter = (str: string): string => {
+  return str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g, '');
+}
+
+export const generateNameId = (name: string, id: string): string => {
+  const nameWithoutSpecialCharacter = removeSpecialCharacter(name);
+  return nameWithoutSpecialCharacter.trim().replace(/\s+/g, '-').toLowerCase() + `-i-${id}`;
+}
+
+export const getIdFromNameId = (nameId: string): string => {
+  const arr = nameId.split('-i-');
+  return arr[arr.length - 1];
+}
