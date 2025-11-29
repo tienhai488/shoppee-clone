@@ -4,18 +4,16 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import RegisterLayout from './layouts/RegisterLayout'
 import MainLayout from './layouts/MainLayout'
-import Profile from './pages/Profile'
+import Profile from './pages/User/pages/Profile'
 import { useContext } from 'react'
 import { AppContext } from './contexts/app.context'
 import path from './constants/path'
 import ProductDetail from './pages/ProductDetail'
 import Cart from './pages/Cart'
 import CartLayout from './layouts/CartLayout'
-
-function AuthMiddleware() {
-  const { isAuthenticated } = useContext(AppContext)
-  return isAuthenticated ? <Outlet /> : <Navigate to={path.login} />
-}
+import UserLayout from './layouts/UserLayout'
+import ChangePassword from './pages/User/pages/ChangePassword/ChangePassword'
+import PurchaseHistory from './pages/User/pages/PurchaseHistory'
 
 function GuestMiddleware() {
   const { isAuthenticated } = useContext(AppContext)
@@ -24,20 +22,6 @@ function GuestMiddleware() {
 
 export default function useRouteElements() {
   const routeElements = useRoutes([
-    {
-      path: '',
-      element: <AuthMiddleware />,
-      children: [
-        {
-          path: path.profile,
-          element: (
-            <MainLayout>
-              <Profile />
-            </MainLayout>
-          )
-        }
-      ]
-    },
     {
       path: path.home,
       index: true,
@@ -82,6 +66,28 @@ export default function useRouteElements() {
               <Register />
             </RegisterLayout>
           )
+        }
+      ]
+    },
+    {
+      path: path.user,
+      element: (
+        <MainLayout>
+          <UserLayout />
+        </MainLayout>
+      ),
+      children: [
+        {
+          path: path.profile,
+          element: <Profile />
+        },
+        {
+          path: path.changePassword,
+          element: <ChangePassword />
+        },
+        {
+          path: path.purchaseHistory,
+          element: <PurchaseHistory />
         }
       ]
     }

@@ -1,13 +1,13 @@
 import type { UseFormRegister } from 'react-hook-form'
 
-interface FormInputProps {
+interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id?: string
-  type: React.HTMLInputTypeAttribute
+  type?: React.HTMLInputTypeAttribute
   errorMessage?: string
   placeholder?: string
   className?: string
   classNameInput?: string
-  name: string
+  name?: string
   register?: UseFormRegister<any>
   rules?: Record<string, any>
 }

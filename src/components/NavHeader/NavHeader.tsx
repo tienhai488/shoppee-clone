@@ -6,6 +6,7 @@ import { useContext } from 'react'
 import path from 'src/constants/path'
 import authApi from 'src/apis/auth.api'
 import { PURCHASE_STATUS } from 'src/constants/purchase'
+import userImage from 'src/assets/images/user.svg'
 
 const NavHeader = () => {
   const queryClient = useQueryClient()
@@ -76,14 +77,14 @@ const NavHeader = () => {
                 Tài khoản của tôi
               </Link>
               <Link
-                to={path.home}
+                to={path.purchaseHistory}
                 className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
               >
                 Đơn mua
               </Link>
               <button
                 onClick={handleLogout}
-                className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left'
+                className='block py-3 px-4 hover:bg-slate-100 bg-white hover:text-cyan-500 w-full text-left cursor-pointer'
               >
                 Đăng xuất
               </button>
@@ -92,8 +93,8 @@ const NavHeader = () => {
         >
           <div className='w-6 h-6 mr-2 shrink-0'>
             <img
-              src='https://cf.shopee.vn/file/d04ea22afab6e6d250a370d7ccc2e675_tn'
-              alt='avatar'
+              src={profile?.avatar || userImage}
+              alt={profile?.name || 'user avatar'}
               className='w-full h-full object-cover rounded-full'
             />
           </div>

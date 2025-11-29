@@ -9,7 +9,7 @@ export interface User {
   __v: number,
   avatar?: string,
   name: string,
+  phone?: string
   date_of_birth?: string,
   address?: string,
-  phone?: string
 }
