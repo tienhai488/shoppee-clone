@@ -72,6 +72,7 @@ export default function Login() {
                 id='email'
                 type='email'
                 className='mt-8'
+                classNameInput='p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
                 name='email'
                 placeholder='Email'
                 register={register}
@@ -81,6 +82,7 @@ export default function Login() {
                 id='password'
                 type='password'
                 className='mt-3'
+                classNameInput='p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
                 name='password'
                 placeholder='Mật khẩu'
                 register={register}

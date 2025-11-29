@@ -9,6 +9,8 @@ import { useContext } from 'react'
 import { AppContext } from './contexts/app.context'
 import path from './constants/path'
 import ProductDetail from './pages/ProductDetail'
+import Cart from './pages/Cart'
+import CartLayout from './layouts/CartLayout'
 
 function AuthMiddleware() {
   const { isAuthenticated } = useContext(AppContext)
@@ -51,6 +53,14 @@ export default function useRouteElements() {
         <MainLayout>
           <ProductDetail />
         </MainLayout>
+      )
+    },
+    {
+      path: path.cart,
+      element: (
+        <CartLayout>
+          <Cart />
+        </CartLayout>
       )
     },
     {

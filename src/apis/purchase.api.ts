@@ -8,6 +8,16 @@ const purchaseApi = {
   },
   getPurchases: (params: { status: PurchaseListStatus }) => {
     return http.get<SuccessResponse<Purchase[]>>(`/purchases`, { params });
+  },
+  buyPurchases: (body: { product_id: string; buy_count: number }[]) => {
+    return http.post<SuccessResponse<Purchase>>(`/purchases/buy-products`, body);
+  },
+  updatePurchase: (body: { product_id: string; buy_count: number }) => {
+    return http.put<SuccessResponse<Purchase>>(`/purchases/update-purchase`, body);
+  },
+  // delete purchase by ids
+  deletePurchases: (body: string[]) => {
+    return http.delete<SuccessResponse<{ deleted_count: number }>>(`/purchases`, { data: body });
   }
 };
 

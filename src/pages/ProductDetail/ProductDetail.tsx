@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import productApi from 'src/apis/product.api'
 import { formatCurrency, formatNumberToSocialStyle, getIdFromNameId, rateSale } from 'src/utils/utils'
 import DOMPurify from 'dompurify'
@@ -12,10 +12,12 @@ import purchaseApi from 'src/apis/purchase.api'
 import { toast } from 'react-toastify'
 import { queryClient } from 'src/main'
 import { PURCHASE_STATUS } from 'src/constants/purchase'
+import path from 'src/constants/path'
 
 export default function ProductDetail() {
   const { nameId } = useParams<{ nameId: string }>()
   const [buyCount, setBuyCount] = useState<number>(1)
+  const navigate = useNavigate()
 
   if (!nameId) return null
 
@@ -37,6 +39,9 @@ export default function ProductDetail() {
         onSuccess: (data) => {
           toast.success(data.data.message, { autoClose: 1000 })
           queryClient.invalidateQueries({ queryKey: ['purchases', { status: PURCHASE_STATUS.IN_CART }] })
+        },
+        onError: (_) => {
+          toast.error('Thêm vào giỏ hàng thất bại', { autoClose: 1000 })
         }
       }
     )
@@ -114,6 +119,14 @@ export default function ProductDetail() {
 
   const handleBuyCountChange = (count: number) => {
     setBuyCount(count)
+  }
+
+  const handleBuyNow = async () => {
+    await addToCartMutation.mutateAsync({ productId: id as string, buyCount })
+
+    navigate(path.cart, {
+      state: { productIdBuyNow: id }
+    })
   }
 
   if (!product) return null
@@ -247,7 +260,10 @@ export default function ProductDetail() {
                   </svg>
                   Thêm vào giỏ hàng
                 </button>
-                <button className='fkex ml-4 h-12 min-w-[5rem] items-center justify-center rounded-sm bg-orange-600 px-5 capitalize text-white shadow-sm outline-none hover:bg-orange-600/90 cursor-pointer'>
+                <button
+                  className='fkex ml-4 h-12 min-w-[5rem] items-center justify-center rounded-sm bg-orange-600 px-5 capitalize text-white shadow-sm outline-none hover:bg-orange-600/90 cursor-pointer'
+                  onClick={handleBuyNow}
+                >
                   Mua ngay
                 </button>
               </div>

@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
 import HttpStatusCode from "src/constants/HttpStatusCode.enum";
+import path from "src/constants/path";
 
 export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
   return axios.isAxiosError<T>(error)
@@ -40,4 +41,9 @@ export const generateNameId = (name: string, id: string): string => {
 export const getIdFromNameId = (nameId: string): string => {
   const arr = nameId.split('-i-');
   return arr[arr.length - 1];
+}
+
+export const getProductDetailUrl = (name: string, id: string): string => {
+  const nameId = generateNameId(name, id);
+  return path.productDetail.replace(':nameId', nameId);
 }

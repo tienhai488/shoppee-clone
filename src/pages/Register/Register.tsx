@@ -74,6 +74,7 @@ export default function Register() {
                 id='email'
                 type='email'
                 className='mt-8'
+                classNameInput='p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
                 name='email'
                 placeholder='Email'
                 register={register}
@@ -83,6 +84,7 @@ export default function Register() {
                 id='password'
                 type='password'
                 className='mt-3'
+                classNameInput='p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
                 name='password'
                 placeholder='Mật khẩu'
                 register={register}
@@ -92,6 +94,7 @@ export default function Register() {
                 id='password_confirmation'
                 type='password'
                 className='mt-3'
+                classNameInput='p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm'
                 name='password_confirmation'
                 placeholder='Xác nhận mật khẩu'
                 register={register}
