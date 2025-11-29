@@ -2,7 +2,7 @@ import type { AxiosError, AxiosInstance } from "axios";
 import axios from "axios";
 import { toast } from "react-toastify";
 import HttpStatusCode from "src/constants/HttpStatusCode.enum";
-import { clearAccessToken, getAccessToken, setAccessToken } from "./auth";
+import { clearAccessToken, clearLS, getAccessToken, setAccessToken } from "./auth";
 import path from "src/constants/path";
 import { clearProfile, setProfile } from "./profile";
 
@@ -46,6 +46,11 @@ class Http {
 
         return response;
       }, function onRejected(error: AxiosError) {
+        if (error.status == HttpStatusCode.Unauthorized) {
+          clearLS();
+          return;
+        }
+
         if (error.status !== HttpStatusCode.UnprocessableEntity) {
           switch (error.status) {
             case HttpStatusCode.NotFound:
